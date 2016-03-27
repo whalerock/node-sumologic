@@ -195,4 +195,27 @@ describe('Sumo Logic Collector', function() {
     checkVarargs("some string", {some: "values", and: "keys"});
     checkVarargs("some string", [1,2,3,4], {});
   });
+
+  it("Re-writes console.log correctly", function () {
+    var expected = {};
+    var sumologic = newTestSumoLogger(function(opts, cb) {
+      expect(JSON.parse(opts.body)).to.deep.equal({level: "INFO", data: expected});
+      cb(undefined, {status: 200});
+    });
+
+    function check(obj) {
+      expected = obj;
+      try {
+        sumologic.replaceConsole();
+        console.log(obj);
+      } finally {
+        sumologic.restoreConsole();
+      }
+      clock.tick(1000);
+    }
+
+    check("msg 1");
+    check({some: "values", and: "keys"});
+    check([1,2,3,4]);
+  });
 });

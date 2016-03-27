@@ -23,11 +23,24 @@ module.exports = function SumoLogger(collectorCode, opts) {
   var collectorEndpoint = endpoint + collectorCode;
   var syncInterval = opts.syncInterval || 1000;
 
+  var stdConsole = {
+    log: console.log,
+    info: console.info,
+    error: console.error,
+    warn: console.warn
+  }
   me.replaceConsole = function() {
     console.log = me.log;
     console.info = me.info;
     console.error = me.error;
     console.warn = me.warn;
+  }
+
+  me.restoreConsole = function() {
+    console.log = stdConsole.log;
+    console.info = stdConsole.info;
+    console.error = stdConsole.error;
+    console.warn = stdConsole.warn;
   }
 
   // Cache of entries we are yet to sync
