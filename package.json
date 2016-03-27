@@ -1,0 +1,25 @@
+{
+  "name": "y",
+  "version": "0.0.1",
+  "description": "Sync Application logs to sumo logic directly via their http API",
+  "main": "sumo.js",
+  "scripts": {
+    "test": "echo 'Non implemented' && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helix-collective/node-sumologic.git"
+  },
+  "keywords": [
+    "sumo",
+    "logic",
+    "sumo-logic",
+    "sumologic"
+  ],
+  "author": "Jeeva Suresh",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/helix-collective/node-sumologic/issues"
+  },
+  "homepage": "https://github.com/helix-collective/node-sumologic#readme"
+}
