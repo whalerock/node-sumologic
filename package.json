@@ -1,10 +1,10 @@
 {
-  "name": "y",
+  "name": "sumologic",
   "version": "0.0.1",
   "description": "Sync Application logs to sumo logic directly via their http API",
   "main": "sumo.js",
   "scripts": {
-    "test": "echo 'Non implemented' && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,14 @@
   "bugs": {
     "url": "https://github.com/helix-collective/node-sumologic/issues"
   },
-  "homepage": "https://github.com/helix-collective/node-sumologic#readme"
+  "homepage": "https://github.com/helix-collective/node-sumologic#readme",
+  "dependencies": {
+    "request": "2.69.0",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3"
+  }
 }
