@@ -43,6 +43,25 @@ module.exports = function SumoLogger(collectorCode, opts) {
     console.warn = stdConsole.warn;
   }
 
+  me.augmentConsole = function() {
+      console.log = function() {
+          stdConsole.log.apply(this, arguments);
+          me.log.apply(this, arguments);
+      }
+      console.info = function() {
+          stdConsole.info.apply(this, arguments);
+          me.info.apply(this, arguments);
+      }
+      console.warn = function() {
+          stdConsole.warn.apply(this, arguments);
+          me.warn.apply(this, arguments);
+      }
+      console.error = function() {
+          stdConsole.error.apply(this, arguments);
+          me.error.apply(this, arguments);
+      }
+  }
+
   // Cache of entries we are yet to sync
   var unsynced = [];
 
@@ -96,8 +115,8 @@ module.exports = function SumoLogger(collectorCode, opts) {
       url: collectorEndpoint,
       body: body,
     }, function(error, response) {
-      var failed = !!error || 
-        response.status < 200 || 
+      var failed = !!error ||
+        response.status < 200 ||
         response.status >= 400;
 
       if (!failed) {
