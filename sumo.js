@@ -1,7 +1,5 @@
 // Log to sumo logic directly
 
-var _ = require('underscore');
-
 function safeToString(obj) {
   try {
     return JSON.stringify(obj);
@@ -23,71 +21,14 @@ module.exports = function SumoLogger(collectorCode, opts) {
   var collectorEndpoint = endpoint + collectorCode;
   var syncInterval = opts.syncInterval || 1000;
 
-  me.stdConsole = {
-    log: console.log,
-    info: console.info,
-    error: console.error,
-    warn: console.warn
-  }
-  me.replaceConsole = function() {
-    console.log = me.log;
-    console.info = me.info;
-    console.error = me.error;
-    console.warn = me.warn;
-  }
-
-  me.restoreConsole = function() {
-    console.log = me.stdConsole.log;
-    console.info = me.stdConsole.info;
-    console.error = me.stdConsole.error;
-    console.warn = me.stdConsole.warn;
-  }
-
-  me.augmentConsole = function() {
-      console.log = function() {
-          me.stdConsole.log.apply(this, arguments);
-          me.log.apply(this, arguments);
-      }
-      console.info = function() {
-          me.stdConsole.info.apply(this, arguments);
-          me.info.apply(this, arguments);
-      }
-      console.warn = function() {
-          me.stdConsole.warn.apply(this, arguments);
-          me.warn.apply(this, arguments);
-      }
-      console.error = function() {
-          me.stdConsole.error.apply(this, arguments);
-          me.error.apply(this, arguments);
-      }
-  }
-
   // Cache of entries we are yet to sync
   var unsynced = [];
 
-  function append(lvl, args) {
-    var stringifyArgs = _.map(args, function(a) {
-      return safeToString(a);
-    });
-
-    // In the common case of a single log value, pull it out. It's easier in sumo
-    // logic to traverse known object graphs without arrays, especially at the
-    // top level
-    var data = ''
-    if (stringifyArgs.length == 1) {
-      data = stringifyArgs[0];
-    } else {
-      data = '[' + stringifyArgs.join(', ') + ']';
-    }
-
-    unsynced.push('{"level":' + JSON.stringify(lvl) + ',"data":' + data + '}');
+  function append(logData) {
+    unsynced.push(safeToString(logData));
   }
 
-  // I want arguments to be treated as an object (helps indexing into the correct fields on sumo logic)
-  me.log = function() { append('INFO', arguments); };
-  me.info = function() { append('INFO', arguments); };
-  me.error = function() { append('ERROR', arguments); };
-  me.warn = function() { append('WARN', arguments); };
+  me.log = function(logData) { append(logData); };
 
   var numBeingSent = 0;
   var maxLines = 100;
